@@ -1,2 +1,0 @@
-# timeTrack
-timeTracker extension
