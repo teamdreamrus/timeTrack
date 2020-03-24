@@ -1,11 +1,30 @@
 // console.log('main');
-// // eslint-disable-next-line no-unused-expressions
-import {Timer} from './timer';
+/* eslint-disable */
 
-let allData;
+import {Timer} from './timer';
+import * as Utils from '../utils';
+
+
+let allData = [];
 let previousHostname = '';
 let timer = new Timer();
+// let data = JSON.parse(Utils.getStorageData('data')) | [];
+// let obj = [{hostname: 'vk.com', count: 100},{hostname: 'www.youtube.com', count: 50}];
+// obj example:   {hostname: 'vk.com', count: 100}
+
+
+const refreshFromStorage = () => {
+    chrome.storage.local.get(['data'], function(result) {
+        if(result.data.length > 0){
+             console.log(result.data);
+            allData = result.data;
+        } else allData = [];
+    });
+};
+
+
 const getCurrentTab = () => {
+    // console.log(Utils.getStorageData());
     chrome.tabs.query({
         currentWindow: true,
         active: true
@@ -15,22 +34,34 @@ const getCurrentTab = () => {
             if (hostname !== previousHostname) {
                 //save
                 //  chrome.storage.local get/set
-                console.table(timer.counter);
-                console.table(previousHostname);
+                let foundIndex = allData.findIndex((el) =>  el.hostname===previousHostname);
+                if(foundIndex > -1) {
+                    allData[foundIndex].count = allData[foundIndex].count + timer.getSeconds();
+                } else {
+                    allData.push({hostname: previousHostname, count: timer.getSeconds()});
+                }
 
                 if (timer.detector) {
                     timer.drop();
                 }
                 timer.start();
                 previousHostname = hostname;
+
             } else {}
         }
     });
 };
 
-
+refreshFromStorage();
+setInterval(() => {refreshFromStorage()}, 10000)
+setInterval(() => {Utils.setToStorageData(allData)}, 3000)
 chrome.tabs.onUpdated.addListener(getCurrentTab);
 chrome.tabs.onActivated.addListener(getCurrentTab);
+
+// setInterval(() => {Utils.setToStorageData(allData)}, 10000)
+//
+// setInterval(Utils. ('data'),5000);
+
 
 
 //
@@ -73,3 +104,4 @@ chrome.tabs.onActivated.addListener(getCurrentTab);
 // };
 //
 // setInterval(print,5000);
+/* eslint-enable */
