@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import Vue from 'vue';
 import App from './components/app.vue';
-import { DEFAULT_LANG } from '../constants';
 
 class Popup {
   constructor() {
@@ -14,4 +13,3 @@ class Popup {
 
 
 window.popup = new Popup();
- 

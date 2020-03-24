@@ -7,7 +7,7 @@
     "debug": "cross-env NODE_ENV=development webpack",
     "build": "cross-env NODE_ENV=production webpack"
   },
-  "author": "AlexeyT",
+  "author": "AlexeyTop1",
   "devDependencies": {
     "@babel/core": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.8.3",
