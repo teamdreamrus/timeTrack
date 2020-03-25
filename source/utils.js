@@ -46,6 +46,7 @@
 //   uuidv4,
 // };
 let setToStorageData = (data) => {
+  console.log(data);
   chrome.storage.local.set({'data': data});
 };
 let getStorageData = () => {

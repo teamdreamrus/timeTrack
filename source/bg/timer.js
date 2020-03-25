@@ -8,7 +8,6 @@ export class Timer {
         }, 1000);
     };
     getSeconds () {
-        this.drop();
         return this.counter;
     }
     drop(){
