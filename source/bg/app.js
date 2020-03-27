@@ -5,7 +5,7 @@ import {Timer} from './timer';
 import * as Utils from '../utils';
 
 
-chrome.storage.local.set({'data': []});
+// chrome.storage.local.set({'data': []});
 let blacklist = ['', 'settings', 'newtab', 'devtools', 'extensions'];
 let allData = [];
 let previousHostname = '';
@@ -18,8 +18,9 @@ let timer = new Timer();
 const refreshFromStorage = () => {
     chrome.storage.local.get(['data'], function (result) {
         if (result.data.length > 0) {
-            // console.log(result.data);
-            allData = result.data;
+            console.log(result.data);
+            allData = result.data.filter(el => !blacklist.includes(el.hostname));
+
         } else allData = [];
     });
 };
@@ -62,7 +63,7 @@ const getCurrentTab = () => {
         currentWindow: true,
         active: true
     }, (tab) => {
-        if(tab[0]) {
+        if(tab[0] && tab[0].url) {
             let hostname = new URL(tab[0].url).hostname;
             if(hostname===''){
                 console.log('hostname is empty url '+ new URL(tab[0].url));
