@@ -84,7 +84,7 @@ const getCurrentTab = () => {
 
 };
 const sortByCount = (arr) => {
-    arr.sort((a, b) => a.count > b.count ? 1 : -1);
+    arr.sort((a, b) => a.count > b.count ? -1 : 1);
 };
 
 refreshFromStorage();
@@ -92,7 +92,7 @@ refreshFromStorage();
 setInterval(() => {
     sortByCount(allData);
     Utils.setToStorageData(allData.filter(el => {
-       return (blacklist.includes(el.hostname) || el.count !== 0 || el.count !== undefined);
+       return (blacklist.includes(el.hostname) || el.count > 0);
     }));
 }, 3000);
 chrome.tabs.onUpdated.addListener(getCurrentTab);
