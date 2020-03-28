@@ -83,11 +83,17 @@ const getCurrentTab = () => {
     });
 
 };
+const sortByCount = (arr) => {
+    arr.sort((a, b) => a.count > b.count ? 1 : -1);
+};
 
 refreshFromStorage();
 // setInterval(() => {refreshFromStorage()}, 10000)
 setInterval(() => {
-    Utils.setToStorageData(allData)
+    sortByCount(allData);
+    Utils.setToStorageData(allData.filter(el => {
+       return (blacklist.includes(el.hostname) || el.count !== 0 || el.count !== undefined);
+    }));
 }, 3000);
 chrome.tabs.onUpdated.addListener(getCurrentTab);
 chrome.tabs.onActivated.addListener(getCurrentTab);
