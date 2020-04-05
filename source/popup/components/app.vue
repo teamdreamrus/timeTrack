@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="data!==[]">
+        <div v-if="data">
             <button @click="refresh">refresh</button>
 
             <div v-for="(item, index) in data">
@@ -9,12 +9,8 @@
                 </div>
             </div>
 
-            <pie-chart :data="chartData" :options="chartOptions"></pie-chart>
+            <pie-chart v-if="getFirstFiveCounts().length>0" :data="chartData" :options="chartOptions"></pie-chart>
         </div>
-<!--        <div class="small">-->
-<!--            <line-chart :chart-data="datacollection"></line-chart>-->
-<!--                        <button @click="fillData()">Randomize</button>-->
-<!--        </div>-->
     </div>
 
 
@@ -24,8 +20,7 @@
     import AsyncComputed from 'vue-async-computed'
     import {getStorageData} from '../../utils'
     import PieChart from './PieChart.js'
-    // import PieChart from "./PieChart";
-    import {Bar} from 'vue-chartjs'
+
 
     Vue.use(AsyncComputed);
 
@@ -39,16 +34,6 @@
                     hoverBorderWidth: 20
                 },
                 chartData: {
-                    hoverBackgroundColor: "red",
-                    hoverBorderWidth: 10,
-                    labels: ["Green", "Red", "Blue", 'white', 'yellow'],
-                    datasets: [
-                        {
-                            label: "Data One",
-                            backgroundColor: this.getRandomColors(),
-                            data: [1, 10, 5,5,3]
-                        }
-                    ]
                 }
             };
         },
@@ -57,6 +42,18 @@
                 const result = await getStorageData('data');
                 this.data = [];
                 this.data.push(...result.data);
+                this.chartData = {
+                    hoverBackgroundColor: "red",
+                    hoverBorderWidth: 10,
+                    labels: this.getFirstFiveHostnames(),
+                    datasets: [
+                        {
+                            label: "Data One",
+                            backgroundColor: this.getRandomColors(),
+                            data: this.getFirstFiveCounts()
+                        }
+                    ]
+                };
                 console.log(this.data);
             },
             getRandomColors() {
@@ -68,7 +65,7 @@
             },
             getFirstFiveHostnames() {
                 return this.data.slice(0, 5).map(el => {
-                    return el.hostname;
+                    return `${el.hostname}`;
                 });
             },
             getFirstFiveCounts() {
