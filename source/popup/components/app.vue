@@ -31,7 +31,9 @@
                 data: [],
                 timesPostHasBeenUpdated: 0,
                 chartOptions: {
-                    hoverBorderWidth: 20
+                    legend: {
+                        display: false
+                    }
                 },
                 chartData: {
                 }
@@ -43,22 +45,28 @@
                 this.data = [];
                 this.data.push(...result.data);
                 this.chartData = {
-                    hoverBackgroundColor: "red",
-                    hoverBorderWidth: 10,
+
+
                     labels: this.getFirstFiveHostnames(),
                     datasets: [
                         {
                             label: "Data One",
-                            backgroundColor: this.getRandomColors(),
-                            data: this.getFirstFiveCounts()
+                            backgroundColor: this.getRandomColors(5),
+                            data: this.getFirstFiveCounts(),
+                            // hoverBackgroundColor: "red",
+                            // hoverBorderWidth: 0,
+                            borderColor: 'white',
+                            hoverBorderColor: 'gray',
+                            hoverBorderWidth: 3
+
                         }
                     ]
                 };
                 console.log(this.data);
             },
-            getRandomColors() {
+            getRandomColors(num) {
                 let colors = [];
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < num; i++) {
                     colors.push("#"+((1<<24)*Math.random()|0).toString(16))
                 }
                 return colors;
