@@ -2,14 +2,8 @@
     <div>
         <div v-if="data">
             <button @click="refresh">refresh</button>
-
-            <div v-for="(item, index) in data">
-                <div class="" v-if="index < 5">
-                    {{ item.count }} - {{item.hostname}}
-                </div>
-            </div>
-
             <pie-chart v-if="getFirstFiveCounts().length>0" :data="chartData" :options="chartOptions"></pie-chart>
+            <div id="myChartLegend"></div>
         </div>
     </div>
 
@@ -67,7 +61,7 @@
             getRandomColors(num) {
                 let colors = [];
                 for (let i = 0; i < num; i++) {
-                    colors.push("#"+((1<<24)*Math.random()|0).toString(16))
+                    colors.push('#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6))
                 }
                 return colors;
             },
@@ -121,6 +115,34 @@
         }
     };
 </script>
-<style lang="less">
+<style >
+    /*[class="0-legend"] {*/
+    /*    cursor: pointer;*/
+    /*    list-style: none;*/
+    /*    padding-left: 0;*/
+    /*}*/
+    /*[class="0-legend"] div {*/
+    /*    display: inline-block;*/
+    /*    padding: 0 5px;*/
+    /*}*/
+    /*[class="0-legend"] div.hidden {*/
+    /*    text-decoration: line-through;*/
+    /*}*/
+    /*[class="0-legend"] div div {*/
+    /*    border-radius: 5px;*/
+    /*    display: inline-block;*/
+    /*    height: 10px;*/
+    /*    margin-right: 10px;*/
+    /*    width: 10px;*/
+    /*}*/
+
+
+    .legendItem {
+
+    }
+    .color-box {
+
+    }
+
 
 </style>
