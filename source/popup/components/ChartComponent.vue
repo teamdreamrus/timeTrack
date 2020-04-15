@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="data">
-            <button @click="refresh">refresh</button>
+<!--            <button @click="refresh">refresh</button>-->
             <pie-chart v-if="getFirstFiveCounts().length>0" :data="chartData" :options="chartOptions"></pie-chart>
             <div id="myChartLegend"></div>
         </div>
@@ -51,7 +51,7 @@
                         }
                     ]
                 };
-                console.log(this.data);
+                // console.log(this.data);
             },
             getRandomColors(num) {
                 let colors = [];
