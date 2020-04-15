@@ -30,5 +30,6 @@
     "*.css",
     "images",
     "*.png"
-  ]
+  ],
+  "options_page": "options.html"
 }

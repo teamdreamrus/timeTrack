@@ -69,6 +69,7 @@ module.exports = {
   entry: {
     bg: `${PATHS.source}/bg/app.js`,
     popup: `${PATHS.source}/popup/app.js`,
+    options: `${PATHS.source}/options/app.js`
   },
   output: {
     path: PATHS.build,
