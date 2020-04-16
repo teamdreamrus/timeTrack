@@ -1,7 +1,6 @@
 <template>
     <div>
         <div v-if="data">
-<!--            <button @click="refresh">refresh</button>-->
             <pie-chart v-if="getFirstFiveCounts().length>0" :data="chartData" :options="chartOptions"></pie-chart>
             <div id="myChartLegend"></div>
         </div>
@@ -42,8 +41,6 @@
                             label: "Data One",
                             backgroundColor: this.getRandomColors(5),
                             data: this.getFirstFiveCounts(),
-                            // hoverBackgroundColor: "red",
-                            // hoverBorderWidth: 0,
                             borderColor: 'white',
                             hoverBorderColor: 'gray',
                             hoverBorderWidth: 3
@@ -51,7 +48,6 @@
                         }
                     ]
                 };
-                // console.log(this.data);
             },
             getRandomColors(num) {
                 let colors = [];
@@ -70,73 +66,53 @@
                     return el.count;
                 });
             }
-            // fillData() {
-            //     this.datacollection = {
-            //         labels: [this.getRandomInt(), this.getRandomInt()],
-            //         datasets: [
-            //             {
-            //             label: "Data One",
-            //             backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
-            //             data: [1, 10, 5]
-            //         }
-            //         ]
-            //     }
-            // },
-            // getRandomInt() {
-            //     return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-            // }
         },
         beforeMount() {
             this.refresh();
         },
         mounted() {
-            // this.fillData();
         },
         watch: {},
         components: {
             pieChart: PieChart
         },
-        // asyncComputed: {
-        //     getData: {
-        //         get() {
-        //             return await getStorageData('data').result;
-        //         }
-        //     },
-        //     async run() {
-        //         const result = await getStorageData('data') ;
-        //         this.data.push(...result.data);
-        //         console.log(this.data);
-        //     }
-        // }
     };
 </script>
 
-<style scoped>
-    /*[class="0-legend"] {*/
-    /*    cursor: pointer;*/
-    /*    list-style: none;*/
-    /*    padding-left: 0;*/
-    /*}*/
-    /*[class="0-legend"] div {*/
-    /*    display: inline-block;*/
-    /*    padding: 0 5px;*/
-    /*}*/
-    /*[class="0-legend"] div.hidden {*/
-    /*    text-decoration: line-through;*/
-    /*}*/
-    /*[class="0-legend"] div div {*/
-    /*    border-radius: 5px;*/
-    /*    display: inline-block;*/
-    /*    height: 10px;*/
-    /*    margin-right: 10px;*/
-    /*    width: 10px;*/
-    /*}*/
-
-
-    .legendItem {
-
+<style>
+    [class="0-legend"] {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-content: center;
+    }
+    .legendText {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px;
+    }
+    .legendItem{
+        cursor: pointer;
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        justify-content: space-between;
+        margin: 5px;
     }
     .color-box {
-
+        width: 30px;
+        height: 30px;
+    }
+    .text {
+        font-size: 14px;
+        text-align: center;
+    }
+    .title-box {
+        background: rgb(241,4,4);
+        background: linear-gradient(90deg, rgba(241,4,4,1) 0%, rgba(230,239,2,1) 26%, rgba(13,252,0,1) 51%, rgba(7,27,235,1) 72%, rgba(255,0,108,1) 100%);
+    }
+    .title-text {
+        font-size: 16px;
+        font-weight: bold;
     }
 </style>
