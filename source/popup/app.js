@@ -6,10 +6,9 @@ class Popup {
   constructor() {
     this.popup = new Vue({
       el: '#popup',
-      render: h => h(App),
+      render: (h) => h(App),
     });
   }
 }
-
 
 window.popup = new Popup();

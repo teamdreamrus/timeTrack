@@ -8,15 +8,16 @@
 //   return promise;
 // };
 //
-const getStorageData = keys => new Promise((resolve, reject) => {
-  chrome.storage.local.get(keys, (items) => {
-    if (chrome.runtime.lastError) {
-      reject(new Error(`Error in storage.get: ${chrome.runtime.lastError}`));
-    } else {
-      resolve(items);
-    }
+const getStorageData = (keys) =>
+  new Promise((resolve, reject) => {
+    chrome.storage.local.get(keys, (items) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error(`Error in storage.get: ${chrome.runtime.lastError}`));
+      } else {
+        resolve(items);
+      }
+    });
   });
-});
 //
 // const setStorageData = (items) => {
 //   chrome.storage.local.set(items);
@@ -47,16 +48,14 @@ const getStorageData = keys => new Promise((resolve, reject) => {
 // };
 const setToStorageData = (data) => {
   console.log(data);
-  chrome.storage.local.set({'data': data});
+  chrome.storage.local.set({ data: data });
 };
 const getStorageData1 = () => {
   let resultReturn = [];
-    chrome.storage.local.get(['data'], (result) => {
-      resultReturn = result;
+  chrome.storage.local.get(['data'], (result) => {
+    resultReturn = result;
   });
   return resultReturn;
 };
 
-export {setToStorageData, getStorageData};
-
-
+export { setToStorageData, getStorageData };

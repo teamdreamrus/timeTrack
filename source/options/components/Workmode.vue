@@ -1,13 +1,11 @@
 <template>
-    <h1>Work Mode</h1>
+  <h1>Work Mode</h1>
 </template>
 
 <script>
-    export default {
-        name: 'Workmode'
-    }
+export default {
+  name: 'Workmode',
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

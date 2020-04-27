@@ -1,9 +1,8 @@
 // console.log('main');
 /* eslint-disable */
 
-import {Timer} from './timer';
+import { Timer } from './timer';
 import * as Utils from '../utils';
-
 
 // chrome.storage.local.set({'data': []});
 let blacklist = ['', 'settings', 'newtab', 'devtools', 'extensions'];
@@ -14,15 +13,13 @@ let timer = new Timer();
 // let obj = [{hostname: 'vk.com', count: 100},{hostname: 'www.youtube.com', count: 50}];
 // obj example:   {hostname: 'vk.com', count: 100}
 
-
 const refreshFromStorage = () => {
-    chrome.storage.local.get(['data'], function (result) {
-        if (result.data.length > 0) {
-            console.log(result.data);
-            allData = result.data.filter(el => !blacklist.includes(el.hostname));
-
-        } else allData = [];
-    });
+  chrome.storage.local.get(['data'], function (result) {
+    if (result.data.length > 0) {
+      console.log(result.data);
+      allData = result.data.filter((el) => !blacklist.includes(el.hostname));
+    } else allData = [];
+  });
 };
 
 // const getCurrentTab = () => {
@@ -59,41 +56,45 @@ const refreshFromStorage = () => {
 //     });
 // };
 const getCurrentTab = () => {
-    chrome.tabs.query({
-        currentWindow: true,
-        active: true
-    }, (tab) => {
-        if(tab[0] && tab[0].url) {
-            let hostname = new URL(tab[0].url).hostname;
-            if(hostname===''){
-                console.log('hostname is empty url '+ new URL(tab[0].url));
-            }
-            let foundIndex = allData.findIndex((el) => el.hostname === previousHostname);
-            if (foundIndex > -1) {
-                // add to count
-                allData[foundIndex].count = allData[foundIndex].count + timer.counter;
-            } else {
-                allData.push({hostname: previousHostname, count: timer.counter})
-                // add new
-            }
-            timer.drop();
-            timer.start();
-            previousHostname = hostname;
+  chrome.tabs.query(
+    {
+      currentWindow: true,
+      active: true,
+    },
+    (tab) => {
+      if (tab[0] && tab[0].url) {
+        let hostname = new URL(tab[0].url).hostname;
+        if (hostname === '') {
+          console.log('hostname is empty url ' + new URL(tab[0].url));
         }
-    });
-
+        let foundIndex = allData.findIndex((el) => el.hostname === previousHostname);
+        if (foundIndex > -1) {
+          // add to count
+          allData[foundIndex].count = allData[foundIndex].count + timer.counter;
+        } else {
+          allData.push({ hostname: previousHostname, count: timer.counter });
+          // add new
+        }
+        timer.drop();
+        timer.start();
+        previousHostname = hostname;
+      }
+    },
+  );
 };
 const sortByCount = (arr) => {
-    arr.sort((a, b) => a.count > b.count ? -1 : 1);
+  arr.sort((a, b) => (a.count > b.count ? -1 : 1));
 };
 
 refreshFromStorage();
 // setInterval(() => {refreshFromStorage()}, 10000)
 setInterval(() => {
-    sortByCount(allData);
-    Utils.setToStorageData(allData.filter(el => {
-       return (blacklist.includes(el.hostname) || el.count > 0);
-    }));
+  sortByCount(allData);
+  Utils.setToStorageData(
+    allData.filter((el) => {
+      return blacklist.includes(el.hostname) || el.count > 0;
+    }),
+  );
 }, 3000);
 chrome.tabs.onUpdated.addListener(getCurrentTab);
 chrome.tabs.onActivated.addListener(getCurrentTab);
@@ -101,7 +102,6 @@ chrome.tabs.onActivated.addListener(getCurrentTab);
 // setInterval(() => {Utils.setToStorageData(allData)}, 10000)
 //
 // setInterval(Utils. ('data'),5000);
-
 
 //
 // let lastUrl='';
