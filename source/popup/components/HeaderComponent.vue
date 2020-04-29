@@ -1,8 +1,8 @@
 <template>
-  <div class="main">
+  <div class="main row">
     <div class="title"><h2>Top 5 your activity</h2></div>
     <div class="activity">
-      <a class="btn btn-position" @click="showOptions()">options</a>
+      <a class="btn btn-primary" @click="showOptions()">options</a>
     </div>
   </div>
 </template>
@@ -12,7 +12,6 @@ export default {
   name: 'HeaderComponent',
   methods: {
     showOptions() {
-      // сообщение в Background на открытие окна
       if (chrome.runtime.openOptionsPage) {
         chrome.runtime.openOptionsPage();
       } else {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <navigation-component></navigation-component>
     <router-view></router-view>
   </div>

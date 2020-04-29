@@ -14,14 +14,15 @@ const getStorageData = (keys) =>
       if (chrome.runtime.lastError) {
         reject(new Error(`Error in storage.get: ${chrome.runtime.lastError}`));
       } else {
+        console.log(items);
         resolve(items);
       }
     });
   });
 //
-// const setStorageData = (items) => {
-//   chrome.storage.local.set(items);
-// };
+const setStorageData = (items) => {
+  chrome.storage.local.set(items);
+};
 //
 // const sendContentMessage = params => new Promise((resolve) => {
 //   chrome.runtime.sendMessage(params, (response) => {
@@ -46,8 +47,11 @@ const getStorageData = (keys) =>
 //   sendContentMessage,
 //   uuidv4,
 // };
+// const setStorageAnyData = (key, data) => {
+//   chrome.storage.local.set({ key: data });
+// };
 const setToStorageData = (data) => {
-  console.log(data);
+  // console.log(data);
   chrome.storage.local.set({ data: data });
 };
 const getStorageData1 = () => {
@@ -58,4 +62,4 @@ const getStorageData1 = () => {
   return resultReturn;
 };
 
-export { setToStorageData, getStorageData };
+export { setToStorageData, getStorageData, setStorageData };

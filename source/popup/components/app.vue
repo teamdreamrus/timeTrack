@@ -7,6 +7,10 @@
 <script>
 import ChartComponent from './ChartComponent.vue';
 import HeaderComponent from './HeaderComponent.vue';
+
+// import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap-vue/dist/bootstrap-vue.css';
+
 export default {
   components: {
     HeaderComponent: HeaderComponent,
@@ -21,16 +25,19 @@ export default {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #574a6f;
+  background: #dedce2;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #e5e5e5;
+  background: #b097e2;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #b097e2;
+  background: #8b62d2;
+}
+* {
+  font-family: 'Montserrat', serif;
 }
 </style>

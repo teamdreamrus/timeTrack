@@ -49,9 +49,7 @@ module.exports = {
   watch: process.env.NODE_ENV === 'development',
   devtool: process.env.NODE_ENV === 'production' ? '' : 'inline-source-map',
   optimization: {
-    minimizer: [
-      new OptimizeCssAssetsPlugin({}),
-    ].concat(minimizer),
+    minimizer: [new OptimizeCssAssetsPlugin({})].concat(minimizer),
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -69,7 +67,7 @@ module.exports = {
   entry: {
     bg: `${PATHS.source}/bg/app.js`,
     popup: `${PATHS.source}/popup/app.js`,
-    options: `${PATHS.source}/options/app.js`
+    options: `${PATHS.source}/options/app.js`,
   },
   output: {
     path: PATHS.build,
@@ -79,12 +77,17 @@ module.exports = {
     rules: [
       {
         test: /\.styl$/,
-        loader: ['style-loader', 'css-loader', 'stylus-loader', {
-          loader: 'vuetify-loader',
-          options: {
-            theme: path.resolve('./node_modules/vuetify/src/stylus/theme.styl'),
+        loader: [
+          'style-loader',
+          'css-loader',
+          'stylus-loader',
+          {
+            loader: 'vuetify-loader',
+            options: {
+              theme: path.resolve('./node_modules/vuetify/src/stylus/theme.styl'),
+            },
           },
-        }],
+        ],
       },
       {
         test: /\.vue$/,
@@ -118,46 +121,35 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        exclude: [
-          /serp\.less/,
-          `${PATHS.source}/style.less`,
-        ],
-        use: [
-          'vue-style-loader',
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'less-loader',
-        ],
+        exclude: [/serp\.less/, `${PATHS.source}/style.less`],
+        use: ['vue-style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
       },
       {
         test: /\.less$/,
-        include: [
-          /serp\.less/,
-          `${PATHS.source}/style.less`,
-        ],
+        include: [/serp\.less/, `${PATHS.source}/style.less`],
         use: [
-          'style-loader', {
+          'style-loader',
+          {
             loader: 'css-loader',
             options: {
               modules: true,
               localIdentName: '[local]-[hash:base64:6]',
             },
-          }, 'less-loader',
+          },
+          'less-loader',
         ],
       },
       {
         test: /\.css$/,
-        use: [
-          { loader: MiniCssExtractPlugin.loader },
-          { loader: 'css-loader' },
-        ],
+        use: [{ loader: MiniCssExtractPlugin.loader }, { loader: 'css-loader' }],
       },
       {
         test: /\.scss$/,
         use: [
           'vue-style-loader',
           MiniCssExtractPlugin.loader,
-          'css-loader', {
+          'css-loader',
+          {
             loader: 'sass-loader',
             options: {
               includePaths: [`${PATHS.material}`],
@@ -178,9 +170,11 @@ module.exports = {
     new VuetifyLoaderPlugin(),
     new VueLoaderPlugin(),
     new CleanWebpackPlugin(['app']),
-    new CopyWebpackPlugin([{
-      from: 'static',
-    }]),
+    new CopyWebpackPlugin([
+      {
+        from: 'static',
+      },
+    ]),
     new MiniCssExtractPlugin({
       filename: '[name]/styles.css',
     }),

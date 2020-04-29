@@ -4,6 +4,64 @@
 import { Timer } from './timer';
 import * as Utils from '../utils';
 
+const reloadAllHistory = () => {
+  let date30DaysAgoInMilliseconds = new Date() - 1000 * 60 * 60 * 24 * 30;
+  let date7DaysAgoInMilliseconds = new Date() - 1000 * 60 * 60 * 24 * 7;
+  let date24HoursAgoInMilliseconds = new Date() - 1000 * 60 * 60 * 24;
+  let date1HourAgoInMilliseconds = new Date() - 1000 * 60 * 60;
+  loadHistory(date30DaysAgoInMilliseconds, 'date30days');
+  loadHistory(date7DaysAgoInMilliseconds, 'date7days');
+  loadHistory(date24HoursAgoInMilliseconds, 'date24hours');
+  loadHistory(date1HourAgoInMilliseconds, 'date1hour');
+};
+const loadHistory = (startTime, key) => {
+  let historyData = {};
+  let maxNumToResults = 100000000;
+  chrome.history.search({ text: '', startTime: startTime, maxResults: maxNumToResults }, function (
+    data,
+  ) {
+    data.forEach((el) => {
+      let hostname = new URL(el.url).hostname;
+      if (historyData[hostname]) {
+        historyData[hostname].visitCount += el.visitCount;
+        historyData[hostname].typedCount += el.typedCount;
+        historyData[hostname].nodes.push(el);
+      } else {
+        historyData[hostname] = {
+          visitCount: el.visitCount,
+          typedCount: el.typedCount,
+          nodes: [el],
+        };
+      }
+    });
+    let historyDataArray = [];
+    for (let key in historyData) {
+      let newObject = historyData[key];
+      newObject.hostname = key;
+      historyDataArray.push(newObject);
+    }
+    sortByCounts(historyDataArray);
+    let item = {};
+    item[key] = historyDataArray;
+    Utils.setStorageData(item);
+    console.log(key, historyDataArray);
+  });
+  const sortByCounts = (arr) => {
+    arr.sort((a, b) => (a.visitCount + a.typedCount > b.visitCount + b.typedCount ? -1 : 1));
+  };
+};
+
+reloadAllHistory();
+// setTimeout(() => {
+//   chrome.storage.local.get('key', (items) => {
+//     if (chrome.runtime.lastError) {
+//       console.log(` ${chrome.runtime.lastError}`);
+//     } else {
+//       console.log(items);
+//     }
+//   });
+// }, 2000);
+
 // chrome.storage.local.set({'data': []});
 let blacklist = ['', 'settings', 'newtab', 'devtools', 'extensions'];
 let allData = [];
