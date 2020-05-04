@@ -1,7 +1,11 @@
 <template>
-  <div class="container-fluid">
-    <navigation-component></navigation-component>
-    <router-view></router-view>
+  <div>
+    <div class="container">
+      <navigation-component></navigation-component>
+    </div>
+    <div class="container mt-3">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 

@@ -61,5 +61,12 @@ const getStorageData1 = () => {
   });
   return resultReturn;
 };
+const getRandomColors = (quantity) => {
+  let colors = [];
+  for (let i = 0; i < quantity; i++) {
+    colors.push('#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6));
+  }
+  return colors;
+};
 
-export { setToStorageData, getStorageData, setStorageData };
+export { setToStorageData, getStorageData, setStorageData, getRandomColors };

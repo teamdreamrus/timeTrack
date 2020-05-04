@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import { getStorageData } from '../../utils';
+import { getStorageData, getRandomColors } from '../../utils';
 import PieChart from './PieChart.js';
 
 export default {
@@ -39,7 +39,7 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: this.getRandomColors(5),
+            backgroundColor: getRandomColors(5),
             data: this.getFirstFiveCounts(),
             borderColor: 'white',
             hoverBorderColor: 'gray',
@@ -47,13 +47,6 @@ export default {
           },
         ],
       };
-    },
-    getRandomColors(num) {
-      let colors = [];
-      for (let i = 0; i < num; i++) {
-        colors.push('#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6));
-      }
-      return colors;
     },
     getFirstFiveHostnames() {
       return this.data.slice(0, 5).map((el) => {

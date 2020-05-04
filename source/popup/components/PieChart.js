@@ -14,10 +14,10 @@ export default {
       },
       legendCallback: function (chart) {
         let text = [];
-        text.push('<div class="' + chart.id + '-legend">');
         text.push(
           `<div class="legendText"><div class="color-box title-box"></div> <div class="text title-text">sites</div> <div class="text title-text">seconds</div></div>`,
         );
+        text.push('<div class="' + chart.id + '-legend">');
         for (let i = 0; i < chart.data.datasets[0].data.length; i++) {
           text.push(`<div class="legendItem" id="item-${i}" ><div class="color-box"
                     style="            
@@ -53,15 +53,15 @@ export default {
       target = target.parentElement;
       let parent = target.parentElement;
 
-      let index = Array.prototype.slice.call(parent.children).indexOf(target) - 1;
+      let index = Array.prototype.slice.call(parent.children).indexOf(target);
 
-      console.log(index);
+      console.log('index', index);
 
       let chart = Chart.instances[0];
       console.log(chart.data.datasets[0]);
       let meta = chart.data.datasets[0]._meta[0].data[index];
 
-      console.log(chart.data.datasets);
+      console.log(meta);
       if (meta.hidden === null) {
         meta.hidden = true;
         target.style.textDecoration = 'line-through';
