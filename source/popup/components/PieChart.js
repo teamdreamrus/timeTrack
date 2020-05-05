@@ -1,13 +1,63 @@
 import { Doughnut, mixins } from 'vue-chartjs';
+const { reactiveProp } = mixins;
 
+const rebuildLegend = (context) => {
+  const myLegendContainer = document.getElementById('myChartLegend');
+  myLegendContainer.innerHTML = context.generateLegend();
+  const parentItem = document.getElementById('parentToItems');
+  console.log('call');
+  // console.log(parentItem.classList);
+  const legendItems = myLegendContainer.getElementsByClassName('legendItem');
+
+  function legendClickCallback(event) {
+    event = event || window.event;
+
+    let target = event.target || event.srcElement;
+    while (target.nodeName !== 'DIV') {
+      target = target.parentElement;
+    }
+    target = target.parentElement;
+    let parent = target.parentElement;
+
+    let index = Array.prototype.slice.call(parent.children).indexOf(target);
+
+    console.log('index', index);
+    let chartIndex = +parentItem.classList[0].split('-')[0];
+    console.log(chartIndex);
+    let chart = Chart.instances[chartIndex];
+    console.log(Chart.instances[chartIndex]);
+    // console.log(Chart.instances[chartIndex].get());
+    let meta = chart.data.datasets[0]._meta[chartIndex].data[index];
+
+    if (meta.hidden === null) {
+      meta.hidden = true;
+      target.style.textDecoration = 'line-through';
+    } else {
+      target.style.textDecoration = 'none';
+      meta.hidden = null;
+    }
+    chart.update();
+  }
+
+  for (let i = 0; i < legendItems.length; i += 1) {
+    legendItems[i].addEventListener('click', legendClickCallback, false);
+  }
+};
 export default {
   extends: Doughnut,
-  props: ['data'],
+  mixins: [reactiveProp],
+  props: ['chartData'],
+  watch: {
+    chartData() {
+      rebuildLegend(this);
+    },
+  },
+  methods: {},
   mounted() {
-    this.renderChart(this.data, {
+    console.log(this.chartData);
+    this.renderChart(this.chartData, {
       legend: {
         display: false,
-
         labels: {
           fontColor: 'black',
         },
@@ -15,9 +65,9 @@ export default {
       legendCallback: function (chart) {
         let text = [];
         text.push(
-          `<div class="legendText"><div class="color-box title-box"></div> <div class="text title-text">sites</div> <div class="text title-text">seconds</div></div>`,
+          `<div class="legendText"><div class="color-box title-box"></div> <div class="text title-text">${chart.data.legendLabels.main}</div> <div class="text title-text">${chart.data.legendLabels.counts}</div></div>`,
         );
-        text.push('<div class="' + chart.id + '-legend">');
+        text.push('<div id="parentToItems" class="' + chart.id + '-legend">');
         for (let i = 0; i < chart.data.datasets[0].data.length; i++) {
           text.push(`<div class="legendItem" id="item-${i}" ><div class="color-box"
                     style="            
@@ -38,42 +88,6 @@ export default {
         return text.join('');
       },
     });
-    const myLegendContainer = document.getElementById('myChartLegend');
-    myLegendContainer.innerHTML = this.generateLegend();
-
-    const legendItems = myLegendContainer.getElementsByClassName('legendItem');
-
-    function legendClickCallback(event) {
-      event = event || window.event;
-
-      let target = event.target || event.srcElement;
-      while (target.nodeName !== 'DIV') {
-        target = target.parentElement;
-      }
-      target = target.parentElement;
-      let parent = target.parentElement;
-
-      let index = Array.prototype.slice.call(parent.children).indexOf(target);
-
-      console.log('index', index);
-
-      let chart = Chart.instances[0];
-      console.log(chart.data.datasets[0]);
-      let meta = chart.data.datasets[0]._meta[0].data[index];
-
-      console.log(meta);
-      if (meta.hidden === null) {
-        meta.hidden = true;
-        target.style.textDecoration = 'line-through';
-      } else {
-        target.style.textDecoration = 'none';
-        meta.hidden = null;
-      }
-      chart.update();
-    }
-
-    for (let i = 0; i < legendItems.length; i += 1) {
-      legendItems[i].addEventListener('click', legendClickCallback, false);
-    }
+    rebuildLegend(this);
   },
 };

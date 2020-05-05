@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <pie-chart v-if="chartData" :data="chartData" :options="chartOptions"></pie-chart>
+  <div v-if="chartData">
+    <pie-chart :chart-data="chartData" :options="chartOptions"></pie-chart>
     <div id="myChartLegend"></div>
   </div>
 </template>
@@ -24,32 +24,39 @@ export default {
   components: {
     pieChart: PieChart,
   },
-  methods: {},
+  watch: {
+    data: function (newVal, oldVal) {
+      // watch it
+      // console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+      this.reloadLocalData();
+    },
+  },
+  methods: {
+    reloadLocalData() {
+      console.log(this.data);
+      if (this.data) {
+        this.chartData = {
+          labels: this.data.map((el) => el.hostname),
+          datasets: [
+            {
+              label: 'Data One',
+              backgroundColor: getRandomColors(this.data.length),
+              data: this.data.map((el) => el.typedCount + el.visitCount),
+              borderColor: 'white',
+              hoverBorderColor: 'gray',
+              hoverBorderWidth: 3,
+            },
+          ],
+          legendLabels: {
+            main: 'sites',
+            counts: 'visits',
+          },
+        };
+      }
+    },
+  },
   beforeMount() {
-    console.log(this.data);
-    // console.log('count:', this.data.length);
-    // console.log(
-    //   'names ',
-    //   this.data.map((el) => el.hostname),
-    // );
-    // console.log(
-    //   'counts:',
-    //   this.data.map((el) => el.nodes.length),
-    // );
-    // console.log('colors:', getRandomColors(this.data.length));
-    this.chartData = {
-      labels: this.data.map((el) => el.hostname),
-      datasets: [
-        {
-          label: 'Data One',
-          backgroundColor: getRandomColors(this.data.length),
-          data: this.data.map((el) => el.typedCount + el.visitCount),
-          borderColor: 'white',
-          hoverBorderColor: 'gray',
-          hoverBorderWidth: 3,
-        },
-      ],
-    };
+    this.reloadLocalData();
   },
 };
 </script>

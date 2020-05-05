@@ -3,7 +3,7 @@
     <div v-if="data">
       <pie-chart
         v-if="getFirstFiveCounts().length > 0"
-        :data="chartData"
+        :chart-data="chartData"
         :options="chartOptions"
       ></pie-chart>
       <div id="myChartLegend"></div>
@@ -34,6 +34,7 @@ export default {
       const result = await getStorageData('data');
       this.data = [];
       this.data.push(...result.data);
+      console.log(this.data);
       this.chartData = {
         labels: this.getFirstFiveHostnames(),
         datasets: [
@@ -46,6 +47,10 @@ export default {
             hoverBorderWidth: 3,
           },
         ],
+        legendLabels: {
+          main: 'sites',
+          counts: 'seconds',
+        },
       };
     },
     getFirstFiveHostnames() {
