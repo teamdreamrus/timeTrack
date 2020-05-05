@@ -1,5 +1,5 @@
 <template>
-  <div v-if="chartData">
+  <div v-if="chartData" class="d-flex flex-row">
     <pie-chart :chart-data="chartData" :options="chartOptions"></pie-chart>
     <div id="myChartLegend"></div>
   </div>
@@ -106,5 +106,9 @@ export default {
 .title-text {
   font-size: 16px;
   font-weight: bold;
+}
+#myChartLegend {
+  height: 350px;
+  overflow: auto;
 }
 </style>

@@ -8,35 +8,42 @@ const rebuildLegend = (context) => {
   console.log('call');
   // console.log(parentItem.classList);
   const legendItems = myLegendContainer.getElementsByClassName('legendItem');
-
+  // console.log(legendItems);
   function legendClickCallback(event) {
     event = event || window.event;
-
+    console.log(event.target.className);
     let target = event.target || event.srcElement;
-    while (target.nodeName !== 'DIV') {
+    while (target.className !== 'legendItem') {
       target = target.parentElement;
+      if (target.className === 'legendItem') break;
+
+      console.log(target.className);
     }
-    target = target.parentElement;
+    // target = target.parentElement;
     let parent = target.parentElement;
+    console.log(target.className);
+    if (target.className === 'legendItem') {
+      let index = Array.prototype.slice.call(parent.children).indexOf(target);
 
-    let index = Array.prototype.slice.call(parent.children).indexOf(target);
+      console.log('index', index);
+      let chartIndex = +parentItem.classList[0].split('-')[0];
+      // console.log(chartIndex);
+      let chart = Chart.instances[chartIndex];
+      console.log(Chart.instances[chartIndex]);
+      // console.log(Chart.instances[chartIndex].get());
+      let meta = chart.data.datasets[0]._meta[chartIndex].data[index];
 
-    console.log('index', index);
-    let chartIndex = +parentItem.classList[0].split('-')[0];
-    console.log(chartIndex);
-    let chart = Chart.instances[chartIndex];
-    console.log(Chart.instances[chartIndex]);
-    // console.log(Chart.instances[chartIndex].get());
-    let meta = chart.data.datasets[0]._meta[chartIndex].data[index];
-
-    if (meta.hidden === null) {
-      meta.hidden = true;
-      target.style.textDecoration = 'line-through';
-    } else {
-      target.style.textDecoration = 'none';
-      meta.hidden = null;
+      if (meta.hidden === null) {
+        meta.hidden = true;
+        target.style.textDecoration = 'line-through';
+        target.style.filter = 'grayscale(1)';
+      } else {
+        target.style.textDecoration = 'none';
+        target.style.filter = '';
+        meta.hidden = null;
+      }
+      chart.update();
     }
-    chart.update();
   }
 
   for (let i = 0; i < legendItems.length; i += 1) {

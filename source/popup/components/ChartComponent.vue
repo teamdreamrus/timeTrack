@@ -86,6 +86,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 5px;
+  align-items: center;
 }
 .legendItem {
   cursor: pointer;
