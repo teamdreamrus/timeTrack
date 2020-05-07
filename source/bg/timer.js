@@ -5,6 +5,7 @@ export class Timer {
     this.detector = setInterval(() => {
       this.counter += 1;
     }, 1000);
+    this.timeStart = new Date();
   }
   getSeconds() {
     return this.counter;
