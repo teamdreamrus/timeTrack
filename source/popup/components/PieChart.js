@@ -61,7 +61,6 @@ export default {
   },
   methods: {},
   mounted() {
-    console.log(this.chartData);
     this.renderChart(this.chartData, {
       legend: {
         display: false,
@@ -70,6 +69,7 @@ export default {
         },
       },
       legendCallback: function (chart) {
+        console.log(this.chartData);
         let text = [];
         text.push(
           `<div class="legendText"><div class="color-box title-box"></div> <div class="text title-text">${chart.data.legendLabels.main}</div> <div class="text title-text">${chart.data.legendLabels.counts}</div></div>`,

@@ -1,77 +1,37 @@
 <template>
-  <div class="d-flex flex-row justify-content-center" v-if="data">
-    <pie-chart v-if="chartData" :chart-data="chartData" :options="chartOptions"></pie-chart>
-    <div id="myChartLegend" class="pl-2"></div>
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    <h5>All-Time Statistics</h5>
+    <div class="d-flex flex-row justify-content-center" v-if="data !== []">
+      <chart-statistic v-if="data" :data="data"></chart-statistic>
+      <div id="myChartLegend" class="pl-2"></div>
+    </div>
   </div>
 </template>
 
 <script>
-import { getRandomColors, getStorageData } from '../../utils';
-import PieChart from '../../popup/components/PieChart.js';
+import { getStorageData } from '../../utils';
+import ChartStatistic from './ChartStatistic.vue';
 export default {
   name: 'Statistic',
   components: {
-    pieChart: PieChart,
+    ChartStatistic: ChartStatistic,
   },
   data() {
     return {
       data: [],
-      chartData: {
-        legendLabels: {
-          main: 'sites',
-          counts: 'seconds',
-        },
-      },
-      chartOptions: {
-        legend: {
-          display: false,
-        },
-      },
+      chartData: {},
     };
   },
   methods: {
-    async refresh() {
+    async reloadData() {
       const result = await getStorageData('data');
       this.data = [];
       this.data.push(...result['data']);
       console.log(this.data);
-      this.chartData = {
-        labels: this.getHostnames(),
-        datasets: [
-          {
-            label: 'Data One',
-            backgroundColor: getRandomColors(this.data.length),
-            data: this.getCounts(),
-            borderColor: 'white',
-            hoverBorderColor: 'gray',
-            hoverBorderWidth: 3,
-          },
-        ],
-        legendLabels: {
-          main: 'sites',
-          counts: 'seconds',
-        },
-      };
-    },
-    getHostnames() {
-      return this.data.map((el) => {
-        return `${el.hostname}`;
-      });
-    },
-    getCounts() {
-      return this.data.map((el) => {
-        let result = el.nodes.reduce((summ, current) => {
-          if (current.count) {
-            return summ + current.count;
-          } else return summ + 0;
-        }, 0);
-        // console.log(result / 1000);
-        return Math.round(result / 1000);
-      });
     },
   },
   created() {
-    this.refresh();
+    this.reloadData();
   },
 };
 </script>
