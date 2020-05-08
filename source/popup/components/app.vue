@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mr-1 ml-1 mt-1 mb-1">
     <header-component></header-component>
     <chart-component></chart-component>
   </div>
@@ -8,8 +8,8 @@
 import ChartComponent from './ChartComponent.vue';
 import HeaderComponent from './HeaderComponent.vue';
 
-// import 'bootstrap/dist/css/bootstrap.css';
-// import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 export default {
   components: {
@@ -36,8 +36,5 @@ export default {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #8b62d2;
-}
-* {
-  font-family: 'Montserrat', serif;
 }
 </style>

@@ -1,6 +1,9 @@
 import { Timer } from './timer';
 import * as Utils from '../utils';
 
+// chrome.storage.local.set({ inLastHour: [] });
+// chrome.storage.local.set({ data: [] });
+
 const reloadAllHistory = () => {
   let date30DaysAgoInMilliseconds = new Date() - 1000 * 60 * 60 * 24 * 30;
   let date7DaysAgoInMilliseconds = new Date() - 1000 * 60 * 60 * 24 * 7;
@@ -48,6 +51,8 @@ const loadHistory = (startTime, key) => {
   };
 };
 
+//setInterval
+setInterval(reloadAllHistory, 10000);
 reloadAllHistory();
 
 let blacklist = ['', 'settings', 'newtab', 'devtools', 'extensions'];
@@ -77,22 +82,35 @@ const getCurrentTab = () => {
           console.log('hostname is empty url ' + new URL(tab[0].url));
           return;
         }
-        let foundIndex = allData.findIndex((el) => el.hostname === previousHostname);
-        if (foundIndex > -1) {
-          // add to count
-          console.log(allData[foundIndex]);
-          allData[foundIndex].nodes.push({ timeStart: timer.timeStart, count: timer.counter });
-        } else {
-          allData.push({
-            hostname: previousHostname,
-            nodes: [{ timeStart: timer.timeStart, count: timer.counter }],
-          });
-          // add new
+        if (previousHostname !== hostname) {
+          let foundIndex = allData.findIndex((el) => el.hostname === hostname);
+          timer.stop();
+          if (timer.timeStart) {
+            if (foundIndex > -1) {
+              // add to count
+              // console.log(allData[foundIndex]);
+              allData[foundIndex].nodes.push({
+                timeStart: timer.timeStart,
+                timeStop: timer.timeStop,
+                count: timer.timeStop - timer.timeStart,
+              });
+            } else {
+              allData.push({
+                hostname: hostname,
+                nodes: [
+                  {
+                    timeStart: timer.timeStart,
+                    timeStop: timer.timeStop,
+                    count: timer.timeStop - timer.timeStart,
+                  },
+                ],
+              });
+              // add new
+            }
+          }
+          timer.start();
+          previousHostname = hostname;
         }
-
-        timer.drop();
-        timer.start();
-        previousHostname = hostname;
       }
     },
   );
@@ -105,12 +123,58 @@ setInterval(() => {
   // sortByCount(allData);
   console.log('trySave');
   console.log(allData);
-  Utils.setToStorageData(
-    allData.filter((el) => {
-      return !blacklist.includes(el.hostname);
-    }),
-  );
-}, 3000);
+  allData = allData.filter((el) => {
+    return !blacklist.includes(el.hostname);
+  });
+  Utils.setToStorageData(allData);
+  splitSave(allData);
+}, 5000);
+
+const transformation = (time, allData) => {
+  return allData
+    .map((unit) => {
+      return {
+        hostname: unit.hostname,
+        nodes: unit.nodes
+          .filter((el) => {
+            return el.timeStop >= time;
+          })
+          .map((el) => {
+            if (el.timeStart <= time) return el;
+            else return { timeStart: time, timeStop: el.timeStop, count: el.count };
+          }),
+      };
+    })
+    .filter((unit) => unit.nodes.length >= 1)
+    .sort((a, b) =>
+      a.nodes.reduce((summ, current) => summ + current.count, 0) >
+      b.nodes.reduce((summ, current) => summ + current.count, 0)
+        ? -1
+        : 1,
+    );
+};
+async function splitSave(allData) {
+  let inLast24Hours = new Date() - 1000 * 60 * 60 * 24;
+  let inLast12Hours = new Date() - 1000 * 60 * 60 * 12;
+  let inLast8Hours = new Date() - 1000 * 60 * 60 * 8;
+  let inLast4Hours = new Date() - 1000 * 60 * 60 * 4;
+  let inLastHour = new Date() - 1000 * 60 * 60;
+  Utils.setStorageData({ inLast24Hours: transformation(inLast24Hours, allData) });
+  Utils.setStorageData({ inLast12Hours: transformation(inLast12Hours, allData) });
+  Utils.setStorageData({ inLast8Hours: transformation(inLast8Hours, allData) });
+  Utils.setStorageData({ inLast4Hours: transformation(inLast4Hours, allData) });
+  Utils.setStorageData({ inLastHour: transformation(inLastHour, allData) });
+}
+
+setInterval(() => {
+  log()
+    .then((r) => console.log(r))
+    .catch((err) => console.log(err));
+}, 7000);
+async function log() {
+  const result = await Utils.getStorageData('inLastHour');
+  console.log('last ', result);
+}
 
 chrome.tabs.onUpdated.addListener(getCurrentTab);
 chrome.tabs.onActivated.addListener(getCurrentTab);

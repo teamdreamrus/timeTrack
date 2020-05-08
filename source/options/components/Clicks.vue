@@ -2,9 +2,10 @@
   <div>
     <div class="row d-flex justify-content-center">
       <div class="d-flex align-items-center flex-row">
-        <b-button size="" variant="primary" class="mr-2">
+        <b-button @click="reloadForm" size="" variant="primary" class="mr-2">
           <b-icon icon="arrow-clockwise" aria-label="Help"></b-icon>
         </b-button>
+
         <b-form-select
           v-model="selected"
           :options="options"
@@ -12,15 +13,16 @@
         ></b-form-select>
       </div>
     </div>
+
     <div class="row d-flex justify-content-center mt-2" v-if="dataSelected !== []">
-      <chart v-if="dataSelected" :data="dataSelected"></chart>
+      <chart-clicks v-if="dataSelected" :data="dataSelected"></chart-clicks>
     </div>
   </div>
 </template>
 
 <script>
 import { getStorageData } from '../../utils.js';
-import Chart from './Chart.vue';
+import ChartClicks from './ChartClicks.vue';
 
 export default {
   name: 'Clicks',
@@ -40,7 +42,7 @@ export default {
     };
   },
   components: {
-    chart: Chart,
+    ChartClicks: ChartClicks,
   },
   methods: {
     reloadData() {
@@ -56,6 +58,10 @@ export default {
     changeSelectedData() {
       this.dataSelected = this.dataFull[this.selected];
       console.log(this.dataSelected);
+    },
+    reloadForm() {
+      this.reloadData();
+      setTimeout(this.changeSelectedData, 1000);
     },
   },
   created() {

@@ -1,12 +1,27 @@
 <template>
   <div>
+    <div class="d-flex justify-content-center align-items-center mt-2">
+      <div class="mr-2" style="font-size: 15pt;">Your activity</div>
+      <b-form-select
+        style="width: auto;"
+        v-model="selected"
+        :options="options"
+        @change="changeSelectedData"
+      ></b-form-select>
+    </div>
     <div v-if="data">
       <pie-chart
-        v-if="getFirstFiveCounts().length > 0"
+        v-if="getCounts().length > 0"
         :chart-data="chartData"
         :options="chartOptions"
       ></pie-chart>
       <div id="myChartLegend"></div>
+    </div>
+    <div v-if="!data" class="d-flex justify-content-center align-items-center flex-column">
+      <b-alert class="mt-2" show variant="dark"
+        >Your activity will appear here as soon as we catch it</b-alert
+      >
+      <div class="lds-dual-ring"></div>
     </div>
   </div>
 </template>
@@ -19,6 +34,7 @@ export default {
   // props: {},
   data() {
     return {
+      fullData: [],
       data: [],
       timesPostHasBeenUpdated: 0,
       chartOptions: {
@@ -27,21 +43,39 @@ export default {
         },
       },
       chartData: {},
+      selected: 'inLastHour',
+      options: [
+        // { value: null, text: 'Please select an option' },
+        { value: 'inLast24Hours', text: 'in the last 24 hours' },
+        { value: 'inLast12Hours', text: 'in the last 12 hours' },
+        { value: 'inLast8Hours', text: 'in the last 8 hours' },
+        { value: 'inLast4Hours', text: 'in the last 4 hours' },
+        { value: 'inLastHour', text: 'in the last hour' },
+      ],
+      dataSelected: [],
     };
   },
+
   methods: {
-    async refresh() {
-      const result = await getStorageData('data');
+    async refresh(place) {
+      const result = await getStorageData([
+        'inLastHour',
+        'inLast4Hours',
+        'inLast8Hours',
+        'inLast12Hours',
+        'inLast24Hours',
+      ]);
       this.data = [];
-      this.data.push(...result.data);
-      console.log(this.data);
+      this.fullData = result;
+      this.data.push(...result[place]);
+      console.log(this.fullData);
       this.chartData = {
-        labels: this.getFirstFiveHostnames(),
+        labels: this.getHostnames(),
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: getRandomColors(5),
-            data: this.getFirstFiveCounts(),
+            backgroundColor: getRandomColors(this.data.length),
+            data: this.getCounts(),
             borderColor: 'white',
             hoverBorderColor: 'gray',
             hoverBorderWidth: 3,
@@ -53,22 +87,56 @@ export default {
         },
       };
     },
-    getFirstFiveHostnames() {
-      return this.data.slice(0, 5).map((el) => {
+    changeSelectedData() {
+      // console.log(this.fullData);
+      this.data = this.fullData[this.selected];
+      console.log('changeSelectedData', this.data);
+    },
+    getHostnames() {
+      return this.data.map((el) => {
         return `${el.hostname}`;
       });
     },
-    getFirstFiveCounts() {
-      return this.data.slice(0, 5).map((el) => {
-        return el.count;
+    getCounts() {
+      return this.data.map((el) => {
+        let result = el.nodes.reduce((summ, current) => {
+          if (current.count) {
+            return summ + current.count;
+          } else return summ + 0;
+        }, 0);
+        // console.log(result / 1000);
+        return Math.round(result / 1000);
       });
     },
   },
   beforeMount() {
-    this.refresh();
+    this.refresh(this.selected);
   },
   mounted() {},
-  watch: {},
+  watch: {
+    data: function (newVal, oldVal) {
+      console.log('watcher');
+      // watch it
+      // console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+      this.chartData = {
+        labels: this.getHostnames(),
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: getRandomColors(this.data.length),
+            data: this.getCounts(),
+            borderColor: 'white',
+            hoverBorderColor: 'gray',
+            hoverBorderWidth: 3,
+          },
+        ],
+        legendLabels: {
+          main: 'sites',
+          counts: 'seconds',
+        },
+      };
+    },
+  },
   components: {
     pieChart: PieChart,
   },
@@ -86,9 +154,11 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 5px;
-  align-items: center;
+  padding-bottom: 2px;
+  border-bottom: 2px solid black;
 }
 .legendItem {
+  align-items: center;
   cursor: pointer;
   list-style: none;
   padding-left: 0;
@@ -118,5 +188,34 @@ export default {
 .title-text {
   font-size: 16px;
   font-weight: bold;
+}
+#myChartLegend {
+  height: auto;
+  max-height: 240px;
+  overflow: auto;
+}
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: ' ';
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #000000;
+  border-color: #000000 transparent #000000 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

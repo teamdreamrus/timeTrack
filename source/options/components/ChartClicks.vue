@@ -10,7 +10,7 @@ import PieChart from '../../popup/components/PieChart.js';
 import { getRandomColors } from '../../utils';
 export default {
   props: ['data'],
-  name: 'Chart',
+  name: 'ChartClicks',
   data() {
     return {
       chartOptions: {
