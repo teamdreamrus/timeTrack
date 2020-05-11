@@ -83,7 +83,7 @@ const getCurrentTab = () => {
           return;
         }
         if (previousHostname !== hostname) {
-          let foundIndex = allData.findIndex((el) => el.hostname === hostname);
+          let foundIndex = allData.findIndex((el) => el.hostname === previousHostname);
           timer.stop();
           if (timer.timeStart) {
             if (foundIndex > -1) {
@@ -96,7 +96,7 @@ const getCurrentTab = () => {
               });
             } else {
               allData.push({
-                hostname: hostname,
+                hostname: previousHostname,
                 nodes: [
                   {
                     timeStart: timer.timeStart,
@@ -178,3 +178,11 @@ async function log() {
 
 chrome.tabs.onUpdated.addListener(getCurrentTab);
 chrome.tabs.onActivated.addListener(getCurrentTab);
+chrome.contextMenus.removeAll();
+chrome.contextMenus.create({
+  title: 'add this page to ban list',
+  contexts: ['page'],
+  onclick: function () {
+    // add to ban list
+  },
+});

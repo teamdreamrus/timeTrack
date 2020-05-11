@@ -11,7 +11,8 @@
     "tabs",
     "cookies",
     "<all_urls>",
-    "history"
+    "history",
+    "contextMenus"
   ],
   "background": {
     "scripts": ["vendors/bundle.js", "bg/bundle.js"],
