@@ -1,8 +1,24 @@
 import { Timer } from './timer';
 import * as Utils from '../utils';
 
+let banList = {};
 // chrome.storage.local.set({ inLastHour: [] });
 // chrome.storage.local.set({ data: [] });
+
+//visits (history)
+
+Utils.getStorageData('banList')
+  .then((res) => {
+    if (res.banList.status) {
+      Utils.setStorageData({
+        banList: {
+          status: false,
+          list: res.banList.list,
+        },
+      });
+    }
+  })
+  .catch((err) => console.log(err));
 
 const reloadAllHistory = () => {
   let date30DaysAgoInMilliseconds = new Date() - 1000 * 60 * 60 * 24 * 30;
@@ -44,7 +60,7 @@ const loadHistory = (startTime, key) => {
     let item = {};
     item[key] = historyDataArray;
     Utils.setStorageData(item);
-    console.log(key, historyDataArray);
+    // console.log(key, historyDataArray);
   });
   const sortByCounts = (arr) => {
     arr.sort((a, b) => (a.visitCount + a.typedCount > b.visitCount + b.typedCount ? -1 : 1));
@@ -55,6 +71,7 @@ const loadHistory = (startTime, key) => {
 setInterval(reloadAllHistory, 10000);
 reloadAllHistory();
 
+//
 let blacklist = ['', 'settings', 'newtab', 'devtools', 'extensions'];
 let allData = [];
 let previousHostname = '';
@@ -63,7 +80,7 @@ let timer = new Timer();
 const refreshFromStorage = () => {
   chrome.storage.local.get(['data'], function (result) {
     if (result.data.length > 0) {
-      console.log(result.data);
+      // console.log(result.data);
       allData = result.data.filter((el) => !blacklist.includes(el.hostname));
     } else allData = [];
   });
@@ -77,9 +94,18 @@ const getCurrentTab = () => {
     },
     (tab) => {
       if (tab[0] && tab[0].url) {
+        if (banList.status) {
+          banList.list.forEach((el) => {
+            if (tab[0].url.includes(el)) {
+              console.log('openPage');
+              chrome.tabs.update(tab.id, { url: 'banPage.html' });
+            }
+          });
+        }
+
         let hostname = new URL(tab[0].url).hostname;
         if (!hostname) {
-          console.log('hostname is empty url ' + new URL(tab[0].url));
+          // console.log('hostname is empty url ' + new URL(tab[0].url));
           return;
         }
         if (previousHostname !== hostname) {
@@ -121,8 +147,8 @@ const sortByCount = (arr) => {
 
 setInterval(() => {
   // sortByCount(allData);
-  console.log('trySave');
-  console.log(allData);
+  // console.log('trySave');
+  // console.log(allData);
   allData = allData.filter((el) => {
     return !blacklist.includes(el.hostname);
   });
@@ -173,11 +199,20 @@ setInterval(() => {
 }, 7000);
 async function log() {
   const result = await Utils.getStorageData('inLastHour');
-  console.log('last ', result);
+  // console.log('last ', result);
 }
+
+//work mode
+// Utils.setStorageData({
+//   banList: {
+//     status: false,
+//     list: [],
+//   },
+// });
 
 chrome.tabs.onUpdated.addListener(getCurrentTab);
 chrome.tabs.onActivated.addListener(getCurrentTab);
+
 chrome.contextMenus.removeAll();
 chrome.contextMenus.create({
   title: 'add this page to ban list',
@@ -185,4 +220,12 @@ chrome.contextMenus.create({
   onclick: function () {
     // add to ban list
   },
+});
+
+// chrome.storage.onChanged.addListener()
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (changes.banList) {
+    banList = changes.banList.newValue;
+    console.log(banList);
+  }
 });

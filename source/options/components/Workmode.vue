@@ -19,7 +19,7 @@
             <b-input-group prepend="URL" class="mb-1">
               <b-form-input v-model="typedUrl"></b-form-input>
               <b-input-group-append>
-                <b-button variant="outline-success" @click="addUrl"
+                <b-button variant="outline-success" @click="addUrl(typedUrl)"
                   ><b-icon icon="plus-circle"></b-icon
                 ></b-button>
               </b-input-group-append>
@@ -60,15 +60,18 @@ export default {
     };
   },
   methods: {
-    addUrl() {
+    addUrl(url) {
       let hostname = '';
-      if (this.typedUrl.includes('.')) {
-        if (this.isValidUrl(this.typedUrl)) {
-          hostname = new URL(this.typedUrl).hostname;
+      let path = '';
+      if (url.includes('.')) {
+        if (this.isValidUrl(url)) {
+          let url = new URL(url);
+          hostname = url.hostname + url.pathname;
         } else {
-          hostname = this.typedUrl;
+          hostname = url;
         }
         if (hostname && this.banList.indexOf(hostname) === -1) {
+          console.log(url);
           this.banList.push(hostname);
           this.saveBanList();
         }
@@ -89,6 +92,7 @@ export default {
     },
     removeHostname(index) {
       this.banList = this.banList.filter((el, i) => i !== index);
+      this.saveBanList();
     },
     isValidUrl(string) {
       try {
@@ -100,13 +104,16 @@ export default {
     },
     saveBanList() {
       //save new list
-      Utils.setStorageData({ banList: this.banList });
+      console.log('save', { banList: { status: this.status, list: this.banList } });
+      Utils.setStorageData({ banList: { status: this.status, list: this.banList } });
     },
-    downloadBanList() {
+    loadBanList() {
       Utils.getStorageData('banList')
         .then((result) => {
           if (result['banList']) {
-            this.banList = result['banList'];
+            this.status = result['banList'].status;
+            this.banList = result['banList'].list;
+            // this.banList = result['banList'];
           }
         })
         .catch((err) => console.log(err));
@@ -114,8 +121,13 @@ export default {
 
     //save toggle to storage
   },
+  watch: {
+    status() {
+      this.saveBanList();
+    },
+  },
   beforeMount() {
-    this.downloadBanList();
+    this.loadBanList();
   },
 };
 </script>
