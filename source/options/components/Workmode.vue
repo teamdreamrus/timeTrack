@@ -41,8 +41,32 @@
         </b-card>
       </div>
       <div class="d-flex justify-content-center align-items-center flex-column ml-5">
-        <div>You often visit:</div>
-        <div style="height: 300px;"></div>
+        <b-card
+          border-variant="success"
+          header="You often visit:"
+          header-border-variant="success"
+          header-text-variant="dark"
+          align="center"
+        >
+          <div style="height: 300px; overflow: auto;">
+            <b-list-group>
+              <b-list-group-item
+                variant="success"
+                class="p-0 d-flex justify-content-between align-items-center"
+                v-for="(site, index) in oftenVisitSites"
+                :key="index"
+              >
+                <button class="btn" @click="addUrl(site.hostname)">
+                  <b-icon icon="arrow-left"></b-icon>
+                </button>
+                <div class="mr-5">
+                  {{ site.hostname }}
+                </div>
+                <div class="empty"></div>
+              </b-list-group-item>
+            </b-list-group>
+          </div>
+        </b-card>
       </div>
     </div>
   </div>
@@ -57,6 +81,7 @@ export default {
       status: false,
       typedUrl: '',
       banList: [],
+      oftenVisitSites: [],
     };
   },
   methods: {
@@ -118,6 +143,15 @@ export default {
         })
         .catch((err) => console.log(err));
     },
+    loadOftenVisitSites() {
+      Utils.getStorageData('date30days')
+        .then((res) => {
+          console.log(res);
+          if (res) this.oftenVisitSites = res['date30days'];
+          console.log(this.oftenVisitSites);
+        })
+        .catch((err) => console.log(err));
+    },
 
     //save toggle to storage
   },
@@ -128,6 +162,7 @@ export default {
   },
   beforeMount() {
     this.loadBanList();
+    this.loadOftenVisitSites();
   },
 };
 </script>

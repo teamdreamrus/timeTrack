@@ -68,6 +68,7 @@ module.exports = {
     bg: `${PATHS.source}/bg/app.js`,
     popup: `${PATHS.source}/popup/app.js`,
     options: `${PATHS.source}/options/app.js`,
+    banPage: `${PATHS.source}/banPage/app.js`,
   },
   output: {
     path: PATHS.build,
