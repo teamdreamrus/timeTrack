@@ -1,5 +1,29 @@
 {
   "appName": {
-    "message": "TimeTracker - your helper with time control"
+    "message": "TimeTracker",
+    "description": "Your helper with time control",
+    "popup": {
+      "header": {
+        "visits": "visits",
+        "all_statistic": "all statistic",
+        "work_mode": "work mode"
+      },
+      "chart": {
+        "your_activity": "Your activity",
+        "inLast24Hours": "in the last 24 hours",
+        "inLast12Hours": "in the last 12 hours",
+        "inLast8Hours": "in the last 8 hours",
+        "inLast4Hours": "in the last 4 hours",
+        "inLastHour": "in the last hour",
+        "sites": "sites",
+        "min": "minutes",
+        "sec": "seconds",
+        "noData": "Your activity will appear here as soon as we catch it"
+      }
+    },
+    "options": {
+    },
+    "banPage": {
+    }
   }
 }

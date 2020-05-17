@@ -1,11 +1,12 @@
 <template>
   <div class="">
-    <!--    <div class="title"><h5>Your activity</h5></div>-->
-    <div class="d-flex justify-content-between">
-      <a class="btn btn-light" @click="showVisits">visits</a>
-      <a class="btn btn-light" @click="showAllStats">all statistic</a>
-      <a class="btn btn-light" @click="showWork">work mode</a>
-      <a class="btn btn-light" @click="showOptions()">
+    <div class="d-flex justify-content-between" v-if="local.visits">
+      <a class="btn btn-light d-flex align-items-center" @click="showVisits">{{ local.visits }}</a>
+      <a class="btn btn-light d-flex align-items-center" @click="showAllStats">{{
+        local.all_statistic
+      }}</a>
+      <a class="btn btn-light d-flex align-items-center" @click="showWork">{{ local.work_mode }}</a>
+      <a class="btn btn-light d-flex align-items-center" @click="showOptions()">
         <b-icon icon="gear" aria-label="Help"></b-icon>
       </a>
     </div>
@@ -15,6 +16,7 @@
 <script>
 export default {
   name: 'HeaderComponent',
+  props: ['local'],
   methods: {
     showVisits() {
       window.open(chrome.runtime.getURL('options.html') + '#/clicks');

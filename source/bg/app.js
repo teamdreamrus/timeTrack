@@ -1,5 +1,7 @@
 import { Timer } from './timer';
 import * as Utils from '../utils';
+import { DEFAULT_LANG } from '../constants';
+import { getStorageData } from '../utils';
 
 let banList = {};
 // chrome.storage.local.set({ inLastHour: [] });
@@ -192,15 +194,15 @@ async function splitSave(allData) {
   Utils.setStorageData({ inLastHour: transformation(inLastHour, allData) });
 }
 
-setInterval(() => {
-  log()
-    .then((r) => console.log(r))
-    .catch((err) => console.log(err));
-}, 7000);
-async function log() {
-  const result = await Utils.getStorageData('inLastHour');
-  // console.log('last ', result);
-}
+// setInterval(() => {
+//   log()
+//     .then((r) => console.log(r))
+//     .catch((err) => console.log(err));
+// }, 7000);
+// async function log() {
+//   const result = await Utils.getStorageData('inLastHour');
+//   // console.log('last ', result);
+// }
 
 //work mode
 // Utils.setStorageData({
@@ -221,11 +223,31 @@ chrome.contextMenus.create({
     // add to ban list
   },
 });
-
 // chrome.storage.onChanged.addListener()
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (changes.banList) {
     banList = changes.banList.newValue;
     console.log(banList);
   }
+  if (changes.lang) {
+    fetch(`../_locales/${changes.lang.newValue}/messages.json`, { mode: 'no-cors' })
+      .then((response) => response.json())
+      .then((data) => Utils.setStorageData({ locales: data }))
+      .catch((error) => console.log(error));
+  }
 });
+
+//locales
+Utils.setStorageData({ lang: DEFAULT_LANG });
+let fetchUrl = `../_locales/${DEFAULT_LANG.code}/messages.json`;
+fetch(fetchUrl, { mode: 'no-cors' })
+  .then((response) => response.json())
+  .then((data) => Utils.setStorageData({ locales: data }))
+  .catch((error) => console.error(error));
+
+// setTimeout(() => {
+//   getLoc();
+// }, 3000);
+// async function getLoc() {
+//   Utils.getLocales('popup').then((res) => console.log(res));
+// }

@@ -3,9 +3,9 @@
     <div class="d-flex justify-content-center flex-row">
       <h5>language:</h5>
       <div class="ml-2 d-flex justify-content-center flex-row">
-        <div class="mr-2" :class="!status ? 'fontBold' : ''">off</div>
+        <div class="mr-2" :class="!status ? 'fontBold' : ''">en</div>
         <b-form-checkbox size="lg" v-model="status" name="check-button" switch> </b-form-checkbox>
-        <div :class="status ? 'fontBold' : ''">on</div>
+        <div :class="status ? 'fontBold' : ''">ru</div>
       </div>
     </div>
     <div class="d-flex justify-content-center flex-row">
@@ -41,4 +41,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.fontBold {
+  font-weight: bold;
+}
+</style>

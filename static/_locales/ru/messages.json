@@ -1,5 +1,32 @@
 {
   "appName": {
-    "message": "TimeTracker - твой помощник в управлении временем"
+    "message": "TimeTracker",
+    "description": "твой помощник в управлении временем",
+    "popup": {
+      "header": {
+        "visits": "переходы",
+        "all_statistic": "вся статистика",
+        "work_mode": "режим работы"
+      },
+      "chart": {
+        "your_activity": "Ваша активность",
+        "inLast24Hours": "за последние 24 часа",
+        "inLast12Hours": "за последние 12 часов",
+        "inLast8Hours": "за последние 8 часов",
+        "inLast4Hours": "за последние 4 часа",
+        "inLastHour": "за последний час",
+        "sites": "сайты",
+        "min": "минут",
+        "sec": "секунд",
+        "noData": "Ваша активность появится здесь, как только мы ее поймаем"
+      }
+    },
+    "options": {
+
+    },
+    "banPage": {
+
+    }
   }
+
 }

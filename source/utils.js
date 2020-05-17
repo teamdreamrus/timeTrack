@@ -14,7 +14,7 @@ const getStorageData = (keys) =>
       if (chrome.runtime.lastError) {
         reject(new Error(`Error in storage.get: ${chrome.runtime.lastError}`));
       } else {
-        console.log(items);
+        // console.log(items);
         resolve(items);
       }
     });
@@ -68,5 +68,16 @@ const getRandomColors = (quantity) => {
   }
   return colors;
 };
+const getLocales = (page) =>
+  new Promise((resolve, reject) => {
+    chrome.storage.local.get('locales', (items) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error(`Error in storage.get: ${chrome.runtime.lastError}`));
+      } else {
+        // console.log(items);
+        resolve(items.locales.appName[page]);
+      }
+    });
+  });
 
-export { setToStorageData, getStorageData, setStorageData, getRandomColors };
+export { setToStorageData, getStorageData, setStorageData, getRandomColors, getLocales };

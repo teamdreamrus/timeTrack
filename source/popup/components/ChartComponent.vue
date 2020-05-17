@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div v-if="local.your_activity">
     <div class="d-flex justify-content-center align-items-center mt-2">
-      <div class="mr-2" style="font-size: 15pt;">Your activity</div>
+      <div class="mr-2" style="font-size: 15pt;">{{ local.your_activity }}</div>
       <b-form-select
         style="width: auto;"
         v-model="selected"
@@ -18,9 +18,7 @@
       <div id="myChartLegend"></div>
     </div>
     <div v-if="!data" class="d-flex justify-content-center align-items-center flex-column">
-      <b-alert class="mt-2" show variant="dark"
-        >Your activity will appear here as soon as we catch it</b-alert
-      >
+      <b-alert class="mt-2" show variant="dark">{{ local.noData }}</b-alert>
       <div class="lds-dual-ring"></div>
     </div>
   </div>
@@ -31,7 +29,7 @@ import PieChart from './PieChart.js';
 
 export default {
   name: 'ChartComponent',
-  // props: {},
+  props: ['local'],
   data() {
     return {
       fullData: [],
@@ -45,17 +43,15 @@ export default {
       chartData: {},
       selected: 'inLastHour',
       options: [
-        // { value: null, text: 'Please select an option' },
-        { value: 'inLast24Hours', text: 'in the last 24 hours' },
-        { value: 'inLast12Hours', text: 'in the last 12 hours' },
-        { value: 'inLast8Hours', text: 'in the last 8 hours' },
-        { value: 'inLast4Hours', text: 'in the last 4 hours' },
-        { value: 'inLastHour', text: 'in the last hour' },
+        { value: 'inLast24Hours', text: this.local.inLast24Hours || 'lox' },
+        { value: 'inLast12Hours', text: this.local.inLastHour || 'lox' },
+        { value: 'inLast8Hours', text: this.local['inLast24Hours'] || 'lox' },
+        { value: 'inLast4Hours', text: this.local['inLast24Hours'] || 'lox' },
+        { value: 'inLastHour', text: this.local['inLast24Hours'] || 'lox' },
       ],
       dataSelected: [],
     };
   },
-
   methods: {
     async refresh(place) {
       const result = await getStorageData([
@@ -90,7 +86,7 @@ export default {
     changeSelectedData() {
       // console.log(this.fullData);
       this.data = this.fullData[this.selected];
-      console.log('changeSelectedData', this.data);
+      console.log('local', this.local);
     },
     getHostnames() {
       return this.data.map((el) => {
@@ -109,10 +105,6 @@ export default {
       });
     },
   },
-  beforeMount() {
-    this.refresh(this.selected);
-  },
-  mounted() {},
   watch: {
     data: function (newVal, oldVal) {
       console.log('watcher');
@@ -131,11 +123,17 @@ export default {
           },
         ],
         legendLabels: {
-          main: 'sites',
-          counts: 'seconds',
+          main: this.local.sites,
+          counts: this.local.sec,
         },
       };
     },
+    // local(n, o) {
+    //   console.log(n, o); // n is the new value, o is the old value.
+    // },
+  },
+  beforeMount() {
+    this.refresh(this.selected);
   },
   components: {
     pieChart: PieChart,
