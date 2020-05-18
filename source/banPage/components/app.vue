@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-center align-items-center mt-5">
+  <div class="d-flex justify-content-center align-items-center mt-5" v-if="local">
     <b-card no-body class="overflow-hidden" style="max-width: 540px;">
       <b-row no-gutters>
         <b-col md="6">
@@ -10,9 +10,9 @@
           ></b-card-img>
         </b-col>
         <b-col md="6">
-          <b-card-body title="Now you have to work">
+          <b-card-body :title="local.title">
             <b-card-text>
-              If you want to access this page, <a href="options.html#/work">go here</a>
+              {{ local.text }}<a href="options.html#/work">{{ local.link }}</a>
             </b-card-text>
           </b-card-body>
         </b-col>
@@ -23,7 +23,19 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import * as Utils from '../../utils';
 
-export default {};
+export default {
+  data() {
+    return {
+      local: false,
+    };
+  },
+  beforeCreate() {
+    Utils.getLocales('banPage').then((res) => {
+      this.local = res;
+    });
+  },
+};
 </script>
 <style lang="scss"></style>

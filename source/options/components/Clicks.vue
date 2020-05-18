@@ -26,7 +26,7 @@ import ChartClicks from './ChartClicks.vue';
 
 export default {
   name: 'Clicks',
-
+  props: ['content'],
   data() {
     return {
       dataFull: {},

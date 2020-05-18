@@ -74,7 +74,7 @@ const getLocales = (page) =>
       if (chrome.runtime.lastError) {
         reject(new Error(`Error in storage.get: ${chrome.runtime.lastError}`));
       } else {
-        // console.log(items);
+        console.log(items);
         resolve(items.locales.appName[page]);
       }
     });

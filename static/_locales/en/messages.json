@@ -22,8 +22,49 @@
       }
     },
     "options": {
+      "navigateLocal": {
+        "dashboard": "Dashboard",
+        "visits": "Visits",
+        "all_statistic": "All statistic",
+        "work_mode": "Work mode",
+        "settings": "Settings"
+      },
+      "content": {
+        "visits": {
+          "date30days": "in the last 30 days",
+          "date7days": "in the last 7 days",
+          "date24hours": "in the last 24 hours",
+          "date1hour": "in the last hour",
+          "sites": "sites",
+          "visits": "visits"
+        },
+        "all_statistic": {
+          "all_time_statistics":"All-Time-Statistics",
+          "sites": "sites",
+          "min": "minutes",
+          "sec": "seconds"
+        },
+        "work_mode": {
+          "work_mode": "Work-mode",
+          "off": "off",
+          "on":"on",
+          "your_ban_list": "Your Ban List:",
+          "you_often_visit": "You often visit:"
+        },
+        "settings": {
+          "language": "language",
+          "en": "en",
+          "ru" : "ru",
+          "time_in": "time in:",
+          "min": "minutes",
+          "sec": "seconds"
+        }
+      }
     },
     "banPage": {
+      "title": "Now you have to work",
+      "text":  "If you want to access this page,",
+      "link": "go here"
     }
   }
 }

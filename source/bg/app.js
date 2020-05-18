@@ -236,13 +236,20 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       .catch((error) => console.log(error));
   }
 });
+// fetch(`../_locales/ru/messages.json`, { mode: 'no-cors' })
+//   .then((response) => response.json())
+//   .then((data) => Utils.setStorageData({ locales: data }))
+//   .catch((error) => console.log(error));
 
 //locales
 Utils.setStorageData({ lang: DEFAULT_LANG });
 let fetchUrl = `../_locales/${DEFAULT_LANG.code}/messages.json`;
 fetch(fetchUrl, { mode: 'no-cors' })
   .then((response) => response.json())
-  .then((data) => Utils.setStorageData({ locales: data }))
+  .then((data) => {
+    Utils.setStorageData({ locales: data });
+    console.log(data);
+  })
   .catch((error) => console.error(error));
 
 // setTimeout(() => {
