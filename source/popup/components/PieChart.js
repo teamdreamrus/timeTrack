@@ -5,7 +5,7 @@ const rebuildLegend = (context) => {
   const myLegendContainer = document.getElementById('myChartLegend');
   myLegendContainer.innerHTML = context.generateLegend();
   const parentItem = document.getElementById('parentToItems');
-  console.log('call');
+  // console.log('call');
   // console.log(parentItem.classList);
   const legendItems = myLegendContainer.getElementsByClassName('legendItem');
   // console.log(legendItems);
@@ -69,7 +69,7 @@ export default {
         },
       },
       legendCallback: function (chart) {
-        console.log(this.chartData);
+        // console.log(this.chartData);
         let text = [];
         text.push(
           `<div class="legendText"><div class="color-box title-box"></div> <div class="text title-text">${chart.data.legendLabels.main}</div> <div class="text title-text">${chart.data.legendLabels.counts}</div></div>`,

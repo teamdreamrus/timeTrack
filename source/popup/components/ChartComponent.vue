@@ -40,18 +40,27 @@ export default {
           display: false,
         },
       },
+      locale: {},
       chartData: {},
       selected: 'inLastHour',
       options: [
-        { value: 'inLast24Hours', text: this.local.inLast24Hours || 'lox' },
-        { value: 'inLast12Hours', text: this.local.inLastHour || 'lox' },
-        { value: 'inLast8Hours', text: this.local['inLast24Hours'] || 'lox' },
-        { value: 'inLast4Hours', text: this.local['inLast24Hours'] || 'lox' },
-        { value: 'inLastHour', text: this.local['inLast24Hours'] || 'lox' },
+        { value: 'inLast24Hours', text: this.local.inLast24Hours || ' ' },
+        { value: 'inLast12Hours', text: this.local.inLast12Hours || ' ' },
+        { value: 'inLast8Hours', text: this.local.inLast8Hours || ' ' },
+        { value: 'inLast4Hours', text: this.local.inLast4Hours || ' ' },
+        { value: 'inLastHour', text: this.local.inLastHour || ' ' },
       ],
       dataSelected: [],
     };
   },
+  created() {},
+  // computed: {
+  //   competition: {
+  //     get: function () {
+  //       return this.local;
+  //     },
+  //   },
+  // },
   methods: {
     async refresh(place) {
       const result = await getStorageData([
@@ -64,7 +73,7 @@ export default {
       this.data = [];
       this.fullData = result;
       this.data.push(...result[place]);
-      console.log(this.fullData);
+      // console.log(this.fullData);
       this.chartData = {
         labels: this.getHostnames(),
         datasets: [
@@ -107,7 +116,7 @@ export default {
   },
   watch: {
     data: function (newVal, oldVal) {
-      console.log('watcher');
+      // console.log('watcher');
       // watch it
       // console.log('Prop changed: ', newVal, ' | was: ', oldVal);
       this.chartData = {
@@ -127,14 +136,16 @@ export default {
           counts: this.local.sec,
         },
       };
+      console.log(this.local);
     },
-    // local(n, o) {
-    //   console.log(n, o); // n is the new value, o is the old value.
-    // },
+    local(n, o) {
+      console.log(n, o); // n is the new value, o is the old value.
+    },
   },
   beforeMount() {
     this.refresh(this.selected);
   },
+  mounted() {},
   components: {
     pieChart: PieChart,
   },

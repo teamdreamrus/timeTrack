@@ -15,19 +15,19 @@ import * as Utils from '../../utils';
 export default {
   data() {
     return {
-      localHeader: {},
-      localChart: {},
+      localHeader: false,
+      localChart: false,
     };
   },
   components: {
     HeaderComponent: HeaderComponent,
-    ChartComponent,
+    ChartComponent: ChartComponent,
   },
   beforeCreate() {
     Utils.getLocales('popup').then((res) => {
       this.localChart = res.chart;
       this.localHeader = res.header;
-      console.log(this.localChart, this.localHeader);
+      // console.log(this.localChart, this.localHeader);
     });
   },
 };
