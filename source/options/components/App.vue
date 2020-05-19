@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <div class="container" v-if="navigateLocal">
-      <navigation-component></navigation-component>
+  <div v-if="content && navigateLocal">
+    <div class="container">
+      <navigation-component :navigateLocal="navigateLocal"></navigation-component>
     </div>
-    <div class="container mt-3" v-if="content">
+    <div class="container mt-3">
       <router-view :content="content"></router-view>
     </div>
   </div>

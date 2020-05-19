@@ -35,8 +35,10 @@
           "date7days": "за последние 7 дней",
           "date24hours": "за последние 24 часа",
           "date1hour": "за последний час",
-          "sites": "сайты",
-          "visits": "посещения"
+          "legend": {
+            "sites": "сайты",
+            "visits": "посещения"
+          }
         },
         "all_statistic": {
           "all_time_statistics":"Статистика за всё время",
@@ -52,7 +54,7 @@
           "you_often_visit": "Вы часто посещаете:"
         },
         "settings": {
-          "language": "язык",
+          "language": "язык:",
           "en": "англ",
           "ru" : "рус",
           "time_in": "время в:",

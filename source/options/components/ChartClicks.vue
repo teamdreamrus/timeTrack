@@ -9,7 +9,7 @@
 import PieChart from '../../popup/components/PieChart.js';
 import { getRandomColors } from '../../utils';
 export default {
-  props: ['data'],
+  props: ['data', 'legendLabels'],
   name: 'ChartClicks',
   data() {
     return {
@@ -48,8 +48,8 @@ export default {
             },
           ],
           legendLabels: {
-            main: 'sites',
-            counts: 'visits',
+            main: this.legendLabels.sites,
+            counts: this.legendLabels.visits,
           },
         };
       }

@@ -1,8 +1,12 @@
 <template>
   <div class="d-flex flex-column justify-content-center align-items-center">
-    <h5>All-Time Statistics</h5>
+    <h5>{{ content.all_statistic.all_time_statistics }}</h5>
     <div class="d-flex flex-row justify-content-center" v-if="data !== []">
-      <chart-statistic v-if="data" :data="data"></chart-statistic>
+      <chart-statistic
+        v-if="data"
+        :data="data"
+        :legendLabels="{ sites: content.all_statistic.sites, count: content.all_statistic.sec }"
+      ></chart-statistic>
       <div id="myChartLegend" class="pl-2"></div>
     </div>
   </div>
@@ -13,6 +17,7 @@ import { getStorageData } from '../../utils';
 import ChartStatistic from './ChartStatistic.vue';
 export default {
   name: 'Statistic',
+  props: ['content'],
   components: {
     ChartStatistic: ChartStatistic,
   },

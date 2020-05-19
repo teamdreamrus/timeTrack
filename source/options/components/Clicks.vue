@@ -15,7 +15,11 @@
     </div>
 
     <div class="row d-flex justify-content-center mt-2" v-if="dataSelected !== []">
-      <chart-clicks v-if="dataSelected" :data="dataSelected"></chart-clicks>
+      <chart-clicks
+        v-if="dataSelected"
+        :data="dataSelected"
+        :legendLabels="content.visits.legend"
+      ></chart-clicks>
     </div>
   </div>
 </template>
@@ -33,10 +37,10 @@ export default {
       selected: 'date7days',
       options: [
         // { value: null, text: 'Please select an option' },
-        { value: 'date30days', text: 'in the last 30 days' },
-        { value: 'date7days', text: 'in the last 7 days' },
-        { value: 'date24hours', text: 'in the last 24 hours' },
-        { value: 'date1hour', text: 'in the last hour' },
+        { value: 'date30days', text: this.content.visits.date30days || ' ' },
+        { value: 'date7days', text: this.content.visits.date7days || ' ' },
+        { value: 'date24hours', text: this.content.visits.date24hours || ' ' },
+        { value: 'date1hour', text: this.content.visits.date1hour || ' ' },
       ],
       dataSelected: [],
     };
@@ -66,6 +70,7 @@ export default {
   },
   created() {
     this.reloadData();
+    console.log(this.content);
   },
 };
 </script>

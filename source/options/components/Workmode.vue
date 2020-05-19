@@ -1,16 +1,16 @@
 <template>
   <div class="d-flex justify-content-center align-items-center flex-column">
-    <h5>Work-mode</h5>
+    <h5>{{ content.work_mode.work_mode }}</h5>
     <div class="d-flex justify-content-center flex-row">
-      <div class="mr-2" :class="!status ? 'fontBold' : ''">off</div>
+      <div class="mr-2" :class="!status ? 'fontBold' : ''">{{ content.work_mode.off }}</div>
       <b-form-checkbox size="lg" v-model="status" name="check-button" switch> </b-form-checkbox>
-      <div :class="status ? 'fontBold' : ''">on</div>
+      <div :class="status ? 'fontBold' : ''">{{ content.work_mode.on }}</div>
     </div>
     <div class="d-flex justify-content-center align-items-center flex-row mt-3">
       <div class="d-flex justify-content-center align-items-center flex-column mr-5">
         <b-card
           border-variant="danger"
-          header="Your Ban List:"
+          :header="content.work_mode.your_ban_list"
           header-border-variant="danger"
           header-text-variant="dark"
           align="center"
@@ -43,7 +43,7 @@
       <div class="d-flex justify-content-center align-items-center flex-column ml-5">
         <b-card
           border-variant="success"
-          header="You often visit:"
+          :header="content.work_mode.you_often_visit"
           header-border-variant="success"
           header-text-variant="dark"
           align="center"
@@ -76,6 +76,7 @@
 import * as Utils from '../../utils.js';
 export default {
   name: 'Workmode',
+  props: ['content'],
   data() {
     return {
       status: false,
