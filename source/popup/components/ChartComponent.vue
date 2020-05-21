@@ -51,9 +51,22 @@ export default {
         { value: 'inLastHour', text: this.local.inLastHour || ' ' },
       ],
       dataSelected: [],
+      coef: 1000,
+      time_in: 'sec',
     };
   },
-  created() {},
+  created() {
+    getStorageData('time_in')
+      .then((res) => {
+        if (res.time_in.name && res.time_in.coefficient) {
+          this.time_in = res.time_in.name;
+          this.coef = res.time_in.coefficient;
+          console.log(this.time_in);
+          console.log(this.coef);
+        }
+      })
+      .catch((err) => console.error(err));
+  },
   // computed: {
   //   competition: {
   //     get: function () {
@@ -88,7 +101,7 @@ export default {
         ],
         legendLabels: {
           main: 'sites',
-          counts: 'seconds',
+          counts: this.local[this.time_in],
         },
       };
     },
@@ -110,7 +123,7 @@ export default {
           } else return summ + 0;
         }, 0);
         // console.log(result / 1000);
-        return Math.round(result / 1000);
+        return Math.round(result / this.coef);
       });
     },
   },
@@ -133,7 +146,7 @@ export default {
         ],
         legendLabels: {
           main: this.local.sites,
-          counts: this.local.sec,
+          counts: this.local[this.time_in],
         },
       };
       console.log(this.local);
@@ -145,6 +158,7 @@ export default {
   beforeMount() {
     this.refresh(this.selected);
   },
+
   mounted() {},
   components: {
     pieChart: PieChart,

@@ -6,7 +6,9 @@
       "header": {
         "visits": "visits",
         "all_statistic": "all statistic",
-        "work_mode": "work mode"
+        "work_mode": "work mode",
+        "off": "off",
+        "on":"on"
       },
       "chart": {
         "your_activity": "Your activity",
@@ -42,7 +44,8 @@
           "all_time_statistics":"All-Time-Statistics",
           "sites": "sites",
           "min": "minutes",
-          "sec": "seconds"
+          "sec": "seconds",
+          "clear": "Clear all"
         },
         "work_mode": {
           "work_mode": "Work-mode",
@@ -52,7 +55,7 @@
           "you_often_visit": "You often visit:"
         },
         "settings": {
-          "language": "language",
+          "language": "language:",
           "en": "en",
           "ru" : "ru",
           "time_in": "time in:",

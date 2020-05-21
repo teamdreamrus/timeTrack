@@ -9,7 +9,7 @@
 import PieChart from '../../popup/components/PieChart.js';
 import { getRandomColors } from '../../utils';
 export default {
-  props: ['data', 'legendLabels'],
+  props: ['data', 'legendLabels', 'coef'],
   name: 'ChartStatistic',
   data() {
     return {
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     reloadLocalData() {
-      console.log(this.data);
+      console.log('coef', this.coef);
       if (this.data) {
         this.chartData = {
           labels: this.data.map((el) => el.hostname),
@@ -40,9 +40,11 @@ export default {
               label: 'Data One',
               backgroundColor: getRandomColors(this.data.length),
               data: this.data.map((el) =>
-                el.nodes.reduce((previos, current) => {
-                  return previos + (current.count ? current.count : 0);
-                }, 0),
+                Math.round(
+                  el.nodes.reduce((previos, current) => {
+                    return previos + (current.count ? current.count : 0);
+                  }, 0) / this.coef,
+                ),
               ),
               borderColor: 'white',
               hoverBorderColor: 'gray',

@@ -230,16 +230,15 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     console.log(banList);
   }
   if (changes.lang) {
-    fetch(`../_locales/${changes.lang.newValue}/messages.json`, { mode: 'no-cors' })
+    fetch(`../_locales/${changes.lang.newValue.code}/messages.json`, { mode: 'no-cors' })
       .then((response) => response.json())
       .then((data) => Utils.setStorageData({ locales: data }))
       .catch((error) => console.log(error));
   }
+  // if (changes.time_in) {
+  //   console.log('time is changed');
+  // }
 });
-// fetch(`../_locales/ru/messages.json`, { mode: 'no-cors' })
-//   .then((response) => response.json())
-//   .then((data) => Utils.setStorageData({ locales: data }))
-//   .catch((error) => console.log(error));
 
 //locales
 Utils.setStorageData({ lang: DEFAULT_LANG });
@@ -252,9 +251,4 @@ fetch(fetchUrl, { mode: 'no-cors' })
   })
   .catch((error) => console.error(error));
 
-// setTimeout(() => {
-//   getLoc();
-// }, 3000);
-// async function getLoc() {
-//   Utils.getLocales('popup').then((res) => console.log(res));
-// }
+// time in
